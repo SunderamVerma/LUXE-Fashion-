@@ -1,0 +1,129 @@
+.info-page {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(201, 169, 110, 0.18), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(10, 10, 10, 0.05), transparent 28%),
+    linear-gradient(180deg, #fff 0%, #faf7f2 100%);
+  min-height: calc(100vh - var(--nav-height));
+  padding: var(--space-4xl) 0;
+}
+
+.info-page__glow {
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.info-page__glow--one {
+  top: -8rem;
+  left: -10rem;
+  background: rgba(201, 169, 110, 0.35);
+}
+
+.info-page__glow--two {
+  bottom: -10rem;
+  right: -8rem;
+  background: rgba(10, 10, 10, 0.1);
+}
+
+.info-page__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.info-page__hero {
+  max-width: 760px;
+  margin-bottom: var(--space-3xl);
+}
+
+.info-page__eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--space-md);
+}
+
+.info-page__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 1.05;
+  color: var(--color-black);
+  margin-bottom: var(--space-lg);
+}
+
+.info-page__intro {
+  max-width: 56rem;
+  font-size: 1.05rem;
+  color: var(--color-gray-700);
+}
+
+.info-page__cta {
+  margin-top: var(--space-xl);
+}
+
+.info-page__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-xl);
+}
+
+.info-card {
+  grid-column: span 6;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  border-radius: var(--radius-xl);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+}
+
+.info-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin-bottom: var(--space-md);
+}
+
+.info-card p {
+  color: var(--color-gray-700);
+}
+
+.info-card__list {
+  display: grid;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.info-card__list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 1rem;
+  border-left: 2px solid rgba(201, 169, 110, 0.45);
+}
+
+.info-card__list strong {
+  color: var(--color-black);
+  font-weight: 600;
+}
+
+.info-card__list span {
+  color: var(--color-gray-600);
+}
+
+@media (max-width: 900px) {
+  .info-card {
+    grid-column: span 12;
+  }
+
+  .info-page {
+    padding: var(--space-3xl) 0;
+  }
+}
