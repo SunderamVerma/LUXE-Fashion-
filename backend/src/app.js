@@ -15,13 +15,14 @@ const app = express();
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow localhost on any port, plus the configured CLIENT_URL
+      // Allow localhost on any port, plus the configured CLIENT_URL, plus Netlify
       const allowedOrigins = [
         'http://localhost:3000',
         'http://localhost:3001',
         'http://localhost:3002',
         'http://localhost:3003',
         process.env.CLIENT_URL || 'http://localhost:3000',
+        'https://luxe-fashion-in.netlify.app',
       ];
       
       if (!origin || allowedOrigins.includes(origin)) {
