@@ -34,8 +34,13 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('An account with this email already exists.');
   }
 
-  // Validate role - only allow 'admin' or 'customer'
-  const validRole = (role === 'admin' || role === 'customer') ? role : 'customer';
+  // Public registration is customer-only. Admin accounts must be provisioned separately.
+  if (role === 'admin') {
+    res.status(403);
+    throw new Error('Admin accounts cannot be created through public registration.');
+  }
+
+  const validRole = 'customer';
   console.log('Validated role:', validRole);
 
   const user = await User.create({

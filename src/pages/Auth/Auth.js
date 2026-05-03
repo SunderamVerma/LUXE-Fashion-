@@ -23,7 +23,7 @@ const initialRegister = {
 export default function Auth() {
   const [params] = useSearchParams();
   const accountType = params.get('type') || 'user'; // 'user' or 'admin'
-  const initialMode = params.get('mode') === 'register' ? 'register' : 'login';
+  const initialMode = accountType === 'admin' ? 'login' : (params.get('mode') === 'register' ? 'register' : 'login');
   
   const [mode, setMode] = useState(initialMode);
   const [type, setType] = useState(accountType);
@@ -188,10 +188,16 @@ export default function Auth() {
             <button type="button" className={mode === 'login' ? 'is-active' : ''} onClick={() => { setMode('login'); setFormErrors({}); setFormMessage(''); }}>
               Sign In
             </button>
-            <button type="button" className={mode === 'register' ? 'is-active' : ''} onClick={() => { setMode('register'); setFormErrors({}); setFormMessage(''); }}>
-              Sign Up
-            </button>
+            {isUserMode ? (
+              <button type="button" className={mode === 'register' ? 'is-active' : ''} onClick={() => { setMode('register'); setFormErrors({}); setFormMessage(''); }}>
+                Sign Up
+              </button>
+            ) : null}
           </div>
+
+          {!isUserMode ? (
+            <p className="auth-form__message">Admin accounts are invite-only. Sign up is disabled for security.</p>
+          ) : null}
 
           {mode === 'login' ? (
             <form className="auth-form" onSubmit={handleLoginSubmit}>
