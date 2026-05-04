@@ -21,7 +21,7 @@ function parseColors(value) {
 
 const listProducts = asyncHandler(async (req, res) => {
   const page = Math.max(1, Number(req.query.page) || 1);
-  const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 12));
+  const limit = Math.min(1000, Math.max(1, Number(req.query.limit) || 12));
   const search = req.query.search?.trim();
   const category = req.query.category?.trim();
   const subcategory = req.query.subcategory?.trim();
