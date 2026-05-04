@@ -114,14 +114,15 @@ export default function Admin() {
   }, [categories]);
 
   const liveOrders = adminOrders.length > 0 ? adminOrders : orders;
-  const recentOrders = liveOrders.slice(0, 5).map((order) => ({
+  const normalizedOrders = useMemo(() => liveOrders.map((order) => ({
     id: order.id || order._id,
     customerName: order.user?.name || order.user?.email || order.customerName || 'Guest Customer',
     date: (order.createdAt || order.date || '').toString().split('T')[0],
     total: order.totalPrice ?? order.total ?? 0,
     status: order.status || 'Processing',
     paymentMethod: order.paymentMethod || 'card',
-  }));
+  })), [liveOrders]);
+  const recentOrders = normalizedOrders.slice(0, 5);
   const totalRevenue = liveOrders.reduce((sum, order) => sum + (order.totalPrice ?? order.total ?? 0), 0);
   const userMetrics = useMemo(() => {
     return adminUsers.map((profile) => {
@@ -475,7 +476,7 @@ export default function Admin() {
                       </tr>
                     </thead>
                     <tbody>
-                      {orders.map((order) => (
+                      {normalizedOrders.map((order) => (
                         <tr key={order.id}>
                           <td className="admin-table__id">{order.id}</td>
                           <td>{order.customerName || 'Guest Customer'}</td>
