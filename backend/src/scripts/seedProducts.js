@@ -24,7 +24,7 @@ function extractJson(source, startMarker, endMarker) {
   return JSON.parse(jsonText);
 }
 
-async function seed() {
+async function seedProducts({ reset = false, connectDb = true } = {}) {
   const mongoUri = process.env.MONGO_URI;
   if (!mongoUri) {
     throw new Error('MONGO_URI is not configured.');
@@ -36,10 +36,12 @@ async function seed() {
   const products = extractJson(source, 'const PRODUCTS = ', '\n\nexport const CATEGORIES =');
   const categories = extractJson(source, 'export const CATEGORIES = ', '\n\nexport const COLLECTIONS =');
 
-  await mongoose.connect(mongoUri);
-  console.log('Connected to MongoDB');
+  if (connectDb && mongoose.connection.readyState === 0) {
+    await mongoose.connect(mongoUri);
+    console.log('Connected to MongoDB');
+  }
 
-  if (process.argv.includes('--reset')) {
+  if (reset) {
     await Product.deleteMany({});
     await Category.deleteMany({});
     console.log('Existing products/categories deleted');
@@ -86,12 +88,20 @@ async function seed() {
   }
 
   console.log(`Seeded ${docs.length} products and ${categories.length} categories`);
-  await mongoose.disconnect();
+
+  return { productsSeeded: docs.length, categoriesSeeded: categories.length };
 }
 
-seed()
-  .catch(async (error) => {
-    console.error('Seed failed:', error.message);
-    await mongoose.disconnect();
-    process.exit(1);
-  });
+if (require.main === module) {
+  seedProducts({ reset: process.argv.includes('--reset') })
+    .then(async () => {
+      await mongoose.disconnect();
+    })
+    .catch(async (error) => {
+      console.error('Seed failed:', error.message);
+      await mongoose.disconnect();
+      process.exit(1);
+    });
+}
+
+module.exports = seedProducts;

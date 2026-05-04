@@ -94,12 +94,14 @@ Set these env vars in the host dashboard:
 ### File uploads
 The app currently stores uploads locally in `backend/uploads/`. For production hosting, move uploads to Cloudinary or S3 because cloud hosts usually do not keep local files permanently.
 
+The backend will also seed the catalog automatically on startup if the product collection is empty.
+
 ## Important environment variables
 - `MONGO_URI` — MongoDB connection string
 - `JWT_SECRET` — auth token signing secret
 - `PORT` — backend port
 - `CLOUDINARY_URL` — optional upload storage config
-- `REACT_APP_API_BASE_URL` — frontend API URL on the hosting platform
+- `REACT_APP_API_URL` — frontend API URL on the hosting platform
 
 ## Seeding notes
 - `npm run seed:demo` seeds demo accounts and a sample order.

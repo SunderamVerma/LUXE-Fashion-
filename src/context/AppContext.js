@@ -140,7 +140,9 @@ function normalizeRemoteProfile(profile) {
 
 export const AppContextProvider = ({ children }) => {
   const stored = readStoredState();
-  const initialState = stored || defaultState;
+  const initialState = stored
+    ? { ...defaultState, ...stored, products: [], categories: [] }
+    : defaultState;
 
   const [cart, dispatchCart] = useReducer(cartReducer, initialState.cart);
   const [orders, dispatchOrders] = useReducer(ordersReducer, initialState.orders);
@@ -154,7 +156,6 @@ export const AppContextProvider = ({ children }) => {
   const [profileLoaded, setProfileLoaded] = useState(!authService.isAuthenticated());
   const syncTimerRef = useRef(null);
 
-  // Fetch products/categories from API on mount
   useEffect(() => {
     const fetchCatalog = async () => {
       setLoading(true);
@@ -193,9 +194,7 @@ export const AppContextProvider = ({ children }) => {
       }
     };
 
-    if (products.length === 0 || categories.length === 0) {
-      fetchCatalog();
-    }
+    fetchCatalog();
   }, []);
 
   useEffect(() => {
@@ -229,10 +228,9 @@ export const AppContextProvider = ({ children }) => {
     hydrateProfile();
   }, []);
 
-  // Persist state to localStorage whenever it changes
   useEffect(() => {
-    saveToStorage({ cart, orders, user, products, categories, wishlist, storeSettings });
-  }, [cart, orders, user, products, categories, wishlist, storeSettings]);
+    saveToStorage({ cart, orders, user, wishlist, storeSettings });
+  }, [cart, orders, user, wishlist, storeSettings]);
 
   useEffect(() => {
     if (!profileLoaded || !authService.isAuthenticated() || !(user?.id || user?._id)) return;
