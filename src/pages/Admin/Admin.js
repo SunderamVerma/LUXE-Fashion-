@@ -147,6 +147,15 @@ export default function Admin() {
     { label: 'Products', value: products.length.toLocaleString(), change: 'Live', icon: FiPackage, color: '#059669' },
   ];
 
+  const handleOrderStatusChange = async (orderId, nextStatus) => {
+    await updateOrderStatus(orderId, nextStatus);
+    setAdminOrders((currentOrders) => currentOrders.map((order) => (
+      String(order.id || order._id) === String(orderId)
+        ? { ...order, status: nextStatus }
+        : order
+    )));
+  };
+
   const resetProductEditor = () => {
     setEditingProductId(null);
     setProductForm(EMPTY_PRODUCT_FORM);
@@ -385,7 +394,7 @@ export default function Admin() {
                           <td>{order.date}</td>
                           <td className="admin-table__price">${order.total.toLocaleString()}</td>
                           <td>
-                            <select value={order.status} onChange={(e) => updateOrderStatus(order.id, e.target.value)}>
+                            <select value={order.status} onChange={(e) => handleOrderStatusChange(order.id, e.target.value)}>
                               {STATUS_OPTIONS.map((status) => (
                                 <option key={status} value={status}>{status}</option>
                               ))}
@@ -483,7 +492,7 @@ export default function Admin() {
                           <td>{order.date}</td>
                           <td className="admin-table__price">${order.total.toLocaleString()}</td>
                           <td>
-                            <select value={order.status} onChange={(e) => updateOrderStatus(order.id, e.target.value)}>
+                            <select value={order.status} onChange={(e) => handleOrderStatusChange(order.id, e.target.value)}>
                               {STATUS_OPTIONS.map((status) => (
                                 <option key={status} value={status}>{status}</option>
                               ))}
